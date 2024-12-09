@@ -1,0 +1,68 @@
+/* Set a light background for the page */
+body {
+  background-color: #f0f8ff; /* Light blue */
+  color: #333; /* Dark gray text */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Center the header content */
+header {
+  text-align: center;
+  background-color: #007acc; /* Blue header background */
+  color: white;
+  padding: 20px;
+}
+
+/* Style the form */
+form {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  gap: 10px;
+}
+
+input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 5px;
+  background-color: #fff;
+}
+
+button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #005a9e;
+}
+
+/* Style the image gallery grid */
+.gallery-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  justify-items: center;
+}
+
+.grid img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.grid img:hover {
+  transform: scale(1.05);
+}
