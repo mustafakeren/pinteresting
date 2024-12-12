@@ -22,26 +22,17 @@
     </main>
 
     <script>
-        // Add basic upload functionality
-        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
-            
-            try {
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                
-                if (data.imageUrl) {
-                    const img = document.createElement('img');
-                    img.src = data.imageUrl;
-                    document.getElementById('image-grid').appendChild(img);
-                }
-            } catch (error) {
-                console.error('Upload failed:', error);
-            }
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            const img = document.createElement('img');
+            img.src = data.fileUrl;
+            document.body.appendChild(img); // Add the image to the page
         });
     </script>
 </body>
