@@ -11,7 +11,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'uploads',
+    folder: '/pinteresting/uploads',
     allowed_formats:  ['jpg', 'png'],
   },
 });
@@ -45,7 +45,7 @@ app.listen(PORT, () => {
 });
 
 cloudinary.config({
-  cloud_name: 'test',
-  api_key: '1234',
-  api_secret: '5678',
+  cloud_name: 'dcsscejrs',
+  api_key: '876463429434619',
+  api_secret: 'sZcHwvimqYytXnjK53PbIdNaiwo8',
 });
