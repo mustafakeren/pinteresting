@@ -57,7 +57,9 @@ button:hover {
 }
 
 .grid img {
-  width: 100%;
+  width: 260px; /* Set a fixed width */
+  height: 120px; /* Set a fixed height */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;

@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Set up the storage for uploaded images
@@ -42,7 +42,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   }
 });
 
-// List existing images
 app.get('/list-images', (req, res) => {
   const uploadDir = './uploads';
   if (!fs.existsSync(uploadDir)) {
@@ -52,12 +51,19 @@ app.get('/list-images', (req, res) => {
     if (err) {
       return res.status(500).send({ message: 'Error reading uploads directory.' });
     }
-    const imageUrls = files.map(file => `/uploads/${file}`);
+    // Sort files by creation time (newest first)
+    const sortedFiles = files.sort((a, b) => {
+      const aTime = fs.statSync(path.join(uploadDir, a)).mtime;
+      const bTime = fs.statSync(path.join(uploadDir, b)).mtime;
+      return bTime - aTime;
+    });
+    const imageUrls = sortedFiles.map(file => `/uploads/${file}`);
     res.json({ images: imageUrls });
   });
 });
 
+
 // Start the server
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+app.listen(PORT, () => {
+  console.log('Server running on ${PORT}');
 });
