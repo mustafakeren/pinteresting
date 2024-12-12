@@ -4,22 +4,19 @@ const path = require('path');
 const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 const app = express();
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 // Set up the storage for uploaded images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = './uploads';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir); // Create 'uploads' folder if it doesn't exist
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename with extension
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    allowed_formats:  ['jpg', 'png'],
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
@@ -35,7 +32,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
   if (req.file) {
     res.send({ 
       message: 'Image uploaded successfully!', 
-      imageUrl: `/uploads/${req.file.filename}` 
+      fileUrl: req.file.filename
     });
   } else {
     res.status(400).send({ message: 'No file uploaded!' });
@@ -45,4 +42,10 @@ app.post('/upload', upload.single('image'), (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log('Server running on ${PORT}');
+});
+
+cloudinary.config({
+  cloud_name: 'test',
+  api_key: '1234',
+  api_secret: '5678',
 });
