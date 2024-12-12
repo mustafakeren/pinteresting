@@ -22,18 +22,61 @@
     </main>
 
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const response = await fetch('/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await response.json();
-            const img = document.createElement('img');
-            img.src = data.fileUrl;
-            document.body.appendChild(img); // Add the image to the page
-        });
+        const cloudinaryFolder = 'uploads'; // Cloudinary folder name
+
+        // Function to fetch and display existing images
+        async function loadExistingImages() {
+            try {
+                const response = await fetch('/list-images'); // Server route to fetch image URLs
+                const data = await response.json();
+
+                if (data.images && Array.isArray(data.images)) {
+                    const grid = document.getElementById('image-grid');
+                    grid.innerHTML = ''; // Clear grid before loading new images
+
+                    data.images.forEach(imageUrl => {
+                        const img = document.createElement('img');
+                        img.src = imageUrl; // Use the Cloudinary URL for the image
+                        grid.appendChild(img);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        // Function to upload a new image to the server (Cloudinary)
+        async function uploadImage(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('upload-form');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Image uploaded successfully!');
+                    loadExistingImages(); // Refresh the gallery after upload
+                } else {
+                    alert('Error uploading image: ' + (data.message || 'Unknown error.'));
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('An error occurred while uploading the image.');
+            }
+        }
+
+        // Attach event listener to the upload form
+        document.getElementById('upload-form').addEventListener('submit', uploadImage);
+
+        // Load existing images when the page is loaded
+        window.onload = loadExistingImages;
     </script>
 </body>
 </html>
