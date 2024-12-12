@@ -42,6 +42,21 @@ app.post('/upload', upload.single('image'), (req, res) => {
   }
 });
 
+// List existing images
+app.get('/list-images', (req, res) => {
+  const uploadDir = './uploads';
+  if (!fs.existsSync(uploadDir)) {
+    return res.json({ images: [] }); // Return empty list if folder doesn't exist
+  }
+  fs.readdir(uploadDir, (err, files) => {
+    if (err) {
+      return res.status(500).send({ message: 'Error reading uploads directory.' });
+    }
+    const imageUrls = files.map(file => `/uploads/${file}`);
+    res.json({ images: imageUrls });
+  });
+});
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
