@@ -42,27 +42,6 @@ app.post('/upload', upload.single('image'), (req, res) => {
   }
 });
 
-app.get('/list-images', (req, res) => {
-  const uploadDir = './uploads';
-  if (!fs.existsSync(uploadDir)) {
-    return res.json({ images: [] }); // Return empty list if folder doesn't exist
-  }
-  fs.readdir(uploadDir, (err, files) => {
-    if (err) {
-      return res.status(500).send({ message: 'Error reading uploads directory.' });
-    }
-    // Sort files by creation time (newest first)
-    const sortedFiles = files.sort((a, b) => {
-      const aTime = fs.statSync(path.join(uploadDir, a)).mtime;
-      const bTime = fs.statSync(path.join(uploadDir, b)).mtime;
-      return bTime - aTime;
-    });
-    const imageUrls = sortedFiles.map(file => `/uploads/${file}`);
-    res.json({ images: imageUrls });
-  });
-});
-
-
 // Start the server
 app.listen(PORT, () => {
   console.log('Server running on ${PORT}');

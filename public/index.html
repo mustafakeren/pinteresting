@@ -22,27 +22,27 @@
     </main>
 
     <script>
-        async function loadExistingImages() {
+        // Add basic upload functionality
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
             try {
-                const response = await fetch('/list-images');
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
                 const data = await response.json();
-    
-                if (data.images && Array.isArray(data.images)) {
-                    const grid = document.getElementById('image-grid');
-                    data.images.forEach(imageUrl => {
-                        const img = document.createElement('img');
-                        img.src = imageUrl;
-                        grid.appendChild(img);
-                    });
+                
+                if (data.imageUrl) {
+                    const img = document.createElement('img');
+                    img.src = data.imageUrl;
+                    document.getElementById('image-grid').appendChild(img);
                 }
             } catch (error) {
-                console.error('Error loading images:', error);
+                console.error('Upload failed:', error);
             }
-        }
-    
-        // Sayfa yüklendiğinde mevcut görselleri yükle
-        window.onload = loadExistingImages;
+        });
     </script>
-    
 </body>
 </html>
