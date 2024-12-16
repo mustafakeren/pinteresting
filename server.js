@@ -55,3 +55,7 @@ app.get('/list-images', async (req, res) => {
 app.listen(PORT, () => {
     console.log("Server running on ${PORT}");
 });
+
+app.get('/health', (req, res) => {
+    res.status(200).send('Healthy');
+});
